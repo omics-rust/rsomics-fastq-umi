@@ -2,11 +2,11 @@
 name = "rsomics-fastq-umi"
 version = "0.2.0"
 description = "FASTQ inline-UMI extract + stamp. Rust port of fastp's UMI processing — full --umi_loc set (read1/read2/index1/index2/per_index/per_read): move the UMI into the read name. SE and PE."
-edition.workspace = true
-rust-version.workspace = true
-license.workspace = true
-repository.workspace = true
-authors.workspace = true
+edition = "2024"
+rust-version = "1.91"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/omics-rust/rsomics-world"
+authors = ["Zane Leong <efd@live.com>"]
 readme = "README.md"
 categories = ["science", "command-line-utilities"]
 keywords = ["fastq", "bioinformatics", "umi", "fastp", "preprocessing"]
@@ -20,26 +20,24 @@ name = "rsomics_fastq_umi"
 path = "src/lib.rs"
 
 [dependencies]
-rsomics-common = { path = "../../../foundation/rsomics-common", version = "0.6" }
-rsomics-fqgz = { path = "../../../foundation/rsomics-fqgz", version = "0.1" }
-rsomics-seqio = { path = "../../../foundation/rsomics-seqio", version = "0.1" }
-rsomics-help = { path = "../../../foundation/rsomics-help", version = "0.3" }
-clap = { workspace = true, features = ["derive"] }
-serde = { workspace = true, features = ["derive"] }
-serde_json.workspace = true
-anyhow.workspace = true
-rayon.workspace = true
-flate2.workspace = true
+rsomics-common = { version = "0.6" }
+rsomics-fqgz = { version = "0.1" }
+rsomics-seqio = { version = "0.1" }
+rsomics-help = { version = "0.3" }
+clap = { version = "4", features = ["derive"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+anyhow = "1"
+rayon = "1"
+flate2 = { version = "1", default-features = false, features = ["zlib-rs"] }
 libdeflater = "1"
 
 [dev-dependencies]
-rsomics-common = { path = "../../../foundation/rsomics-common", version = "0.6", features = ["test-support", "rayon"] }
+rsomics-common = { version = "0.6", features = ["test-support", "rayon"] }
 tempfile = "3"
-criterion.workspace = true
+criterion = { version = "0.7", default-features = false, features = ["cargo_bench_support"] }
 
 [[bench]]
 name = "fastq_umi"
 harness = false
 
-[lints]
-workspace = true
