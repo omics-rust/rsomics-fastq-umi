@@ -19,6 +19,7 @@ path = "src/main.rs"
 name = "rsomics_fastq_umi"
 path = "src/lib.rs"
 
+doctest = false
 [dependencies]
 rsomics-common = { version = "0.6" }
 rsomics-fqgz = { version = "0.1" }
