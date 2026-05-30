@@ -4,7 +4,6 @@ use rsomics_seqio::OwnedRecord;
 use crate::index::{first_index, last_index};
 use crate::umi_loc::{UmiConfig, UmiLoc};
 
-// Stamp the UMI tag into the read name before the first space (or append).
 pub(crate) fn stamp(id: &[u8], tag: &[u8]) -> Vec<u8> {
     let mut out = Vec::with_capacity(id.len() + tag.len());
     if let Some(sp) = id.iter().position(|&b| b == b' ') {

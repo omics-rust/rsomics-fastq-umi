@@ -341,7 +341,6 @@ pub const HELP: HelpSpec = HelpSpec {
 mod tests {
     use clap::CommandFactory;
 
-    // clap debug_assert fires only when a binary parses; without this test, CLI-definition errors (duplicate shorts, id clashes) are invisible to `cargo test`.
     #[test]
     fn cli_definition_is_valid() {
         super::Cli::command().debug_assert();

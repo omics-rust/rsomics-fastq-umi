@@ -1,6 +1,3 @@
-// fastp src/read.cpp (MIT): backward scan from len-3, returns the field after
-// the last ':' or '+' delimiter in the read name.
-
 // fastp Read::lastIndex: backward from len-3, returns everything after last ':'/'+'
 pub(crate) fn last_index(name: &[u8]) -> Vec<u8> {
     let len = name.len();
