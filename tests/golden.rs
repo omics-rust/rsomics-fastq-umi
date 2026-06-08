@@ -199,3 +199,79 @@ fn pe_only_loc_in_se_rejected_cli() {
         );
     }
 }
+
+// Paired-end goldens captured from fastp 0.20.1 (pe_umi_*.r1/.r2). The compat.rs
+// byte-equality tests cover the same flags but skip when fastp is off PATH; these
+// gate the PE locations in CI where fastp is absent.
+fn pe_golden(in1: &str, in2: &str, gold1: &str, gold2: &str, extra: &[&str]) {
+    let tmp = tempfile::tempdir().unwrap();
+    let o1 = tmp.path().join("o1.fq");
+    let o2 = tmp.path().join("o2.fq");
+    let mut cmd = Command::new(ours());
+    cmd.arg("-i")
+        .arg(fixture(in1))
+        .arg("-I")
+        .arg(fixture(in2))
+        .arg("-o")
+        .arg(&o1)
+        .arg("-O")
+        .arg(&o2)
+        .args(extra);
+    assert!(cmd.status().unwrap().success());
+    assert_eq!(
+        std::fs::read(&o1).unwrap(),
+        std::fs::read(fixture(gold1)).unwrap(),
+        "R1 diverges from fastp 0.20.1 golden {gold1}",
+    );
+    assert_eq!(
+        std::fs::read(&o2).unwrap(),
+        std::fs::read(fixture(gold2)).unwrap(),
+        "R2 diverges from fastp 0.20.1 golden {gold2}",
+    );
+}
+
+#[test]
+fn pe_umi_read1_len8_golden() {
+    pe_golden(
+        "pe_umi.fastq.r1",
+        "pe_umi.fastq.r2",
+        "pe_umi_read1_len8.r1",
+        "pe_umi_read1_len8.r2",
+        &["--umi_len", "8"],
+    );
+}
+
+#[test]
+fn pe_umi_index2_golden() {
+    pe_golden(
+        "pe_index.fastq.r1",
+        "pe_index.fastq.r2",
+        "pe_umi_index2.r1",
+        "pe_umi_index2.r2",
+        &["--umi_loc", "index2"],
+    );
+}
+
+// per_index merges firstIndex_lastIndex of read1's comment.
+#[test]
+fn pe_umi_per_index_golden() {
+    pe_golden(
+        "pe_index.fastq.r1",
+        "pe_index.fastq.r2",
+        "pe_umi_per_index.r1",
+        "pe_umi_per_index.r2",
+        &["--umi_loc", "per_index"],
+    );
+}
+
+// per_read trims umi_len off both mates and stamps the merged umi1_umi2.
+#[test]
+fn pe_umi_per_read_len6_golden() {
+    pe_golden(
+        "pe_umi.fastq.r1",
+        "pe_umi.fastq.r2",
+        "pe_umi_per_read_len6.r1",
+        "pe_umi_per_read_len6.r2",
+        &["--umi_loc", "per_read", "--umi_len", "6"],
+    );
+}
